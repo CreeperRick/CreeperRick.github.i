@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESPdefeator</title>
+    <title>ESPdefeator OS</title>
     <style>
         /* RESET — eDEX-UI ultra-minimalist, neon green */
         * {
@@ -40,14 +40,14 @@
             width: 95vw;
             max-width: 1400px;
             height: 90vh;
-            background: #0f120f;
+            background: rgba(15, 18, 15, 0.9);
             border: 2px solid #1fff8e;
             border-radius: 12px;
-            box-shadow: 0 0 30px #1fff8e;
+            box-shadow: 0 0 30px rgba(31, 255, 142, 0.2);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            backdrop-filter: blur(1px);
+            backdrop-filter: blur(4px);
         }
 
         /* STATUS BAR */
@@ -62,105 +62,52 @@
             text-transform: uppercase;
         }
 
-        .status-item { display: flex; align-items: center; gap: 6px; }
-        .dot { width: 10px; height: 10px; background: #1fff8e; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .dot { width: 10px; height: 10px; background: #1fff8e; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 5px #1fff8e; } 50% { opacity: 0.3; } }
 
         /* MAIN GRID */
         .edex-main { display: flex; flex: 1; padding: 6px; gap: 6px; min-height: 0; }
 
         /* FILE EXPLORER */
-        .file-explorer {
-            width: 280px;
-            background: #0b140b;
-            border: 1px solid #1fff8e;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .explorer-header {
-            background: #1a2a1a;
-            padding: 10px 12px;
-            border-bottom: 2px solid #2aff8e;
-            color: #adffb0;
-            font-weight: bold;
-            display: flex;
-            cursor: pointer;
-        }
-
+        .file-explorer { width: 280px; background: #0b140b; border: 1px solid #1fff8e; border-radius: 8px; display: flex; flex-direction: column; }
+        .explorer-header { background: #1a2a1a; padding: 10px 12px; border-bottom: 2px solid #2aff8e; color: #adffb0; font-weight: bold; display: flex; }
         .explorer-tree { flex: 1; overflow-y: auto; padding: 12px 0; }
-
-        .tree-item {
-            padding: 8px 12px 8px 30px;
-            color: #9effb0;
-            font-size: 0.95rem;
-            position: relative;
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
-        }
-
-        .tree-item:hover { background: #1a3a1a; }
-        .tree-item.active { background: #1f4a1f; border-left: 4px solid #8affb0; color: #fff; }
-
+        .tree-item { padding: 8px 12px 8px 30px; color: #9effb0; font-size: 0.9rem; position: relative; cursor: pointer; text-decoration: none; display: block; }
+        .tree-item:hover { background: rgba(26, 58, 26, 0.5); }
+        .tree-item.active { background: #1f4a1f; color: #fff; border-left: 3px solid #1fff8e; }
         .tree-item::before { content: "📁"; position: absolute; left: 8px; }
         .tree-item.file::before { content: "📄"; }
 
-        /* TERMINAL & CLOCK */
+        /* CENTER AREA */
         .center-area { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-        .terminal-window {
-            background: #0a100a;
-            border: 1px solid #1fff8e;
-            border-radius: 8px;
-            flex: 2;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
+        .terminal-window { background: #0a100a; border: 1px solid #1fff8e; border-radius: 8px; flex: 2; display: flex; flex-direction: column; overflow: hidden; }
+        .terminal-titlebar { background: #1a2a1a; padding: 8px 16px; border-bottom: 2px solid #1fff8e; color: #b3ffb3; display: flex; justify-content: space-between; font-size: 0.75rem; }
+        .terminal-content { flex: 1; padding: 16px; overflow-y: auto; color: #b0ffb0; font-size: 0.9rem; line-height: 1.4; }
+        .prompt { color: #9eff6e; font-weight: bold; }
 
-        .terminal-titlebar { background: #1a2a1a; padding: 8px 16px; border-bottom: 2px solid #1fff8e; color: #b3ffb3; display: flex; justify-content: space-between; font-size: 0.8rem; }
-        .terminal-content { flex: 1; padding: 16px; overflow-y: auto; color: #b0ffb0; text-shadow: 0 0 5px #1fff8e; }
-        .prompt { color: #9eff6e; font-weight: bold; margin-right: 8px; }
+        /* BOTTOM PANELS */
+        .bottom-panels { display: flex; gap: 6px; flex: 1.2; }
+        .clock-panel { background: #0b140b; border: 1px solid #1fff8e; border-radius: 8px; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .analog-clock { font-size: 3rem; color: #8affb0; text-shadow: 0 0 10px #1fff8e; }
 
-        .clock-panel {
-            background: #0b140b;
-            border: 1px solid #1fff8e;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            flex-shrink: 0;
-        }
-        .analog-clock { font-size: 2.5rem; color: #8affb0; text-shadow: 0 0 15px #1fff8e; }
-
-        .social-links-panel {
-            background: #0b140b;
-            border: 1px solid #1fff8e;
-            border-radius: 8px;
-            padding: 10px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
+        .social-links-panel { background: #0b140b; border: 1px solid #1fff8e; border-radius: 8px; padding: 10px; flex: 1; display: flex; flex-direction: column; }
+        #quickLinksContainer { flex: 1; overflow-y: auto; margin-top: 8px; padding-right: 4px; }
         
-        /* SCROLLBAR STYLING */
-        #quickLinksContainer::-webkit-scrollbar { width: 4px; }
-        #quickLinksContainer::-webkit-scrollbar-track { background: transparent; }
-        #quickLinksContainer::-webkit-scrollbar-thumb { background: #1fff8e; border-radius: 2px; }
-
-        .social-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
-        .social-grid a { 
-            background: #0f1f0f; border: 1px solid #2eff9e; color: #fff; 
-            text-decoration: none; padding: 10px; font-size: 0.8rem; border-radius: 4px; text-align: center;
-            transition: all 0.2s;
+        /* QUICK LINKS BUTTONS */
+        .ql-btn { 
+            display: block; background: #0f1f0f; border: 1px solid #2eff9e; color: #fff; 
+            text-decoration: none; padding: 10px; font-size: 0.75rem; border-radius: 4px; 
+            text-align: center; margin-bottom: 6px; transition: 0.3s;
         }
-        .social-grid a:hover { background: #1f4a1f; box-shadow: 0 0 10px #1fff8e; }
+        .ql-btn:hover { background: #1fff8e; color: #000; box-shadow: 0 0 12px #1fff8e; }
 
-        .edex-footer { background: #0f1a0f; border-top: 2px solid #1fff8e; padding: 8px 20px; color: #4eff9e; font-size: 0.8rem; display: flex; justify-content: space-between; }
+        /* FOOTER */
+        .edex-footer { background: #0f1a0f; border-top: 2px solid #1fff8e; padding: 8px 20px; color: #4eff9e; font-size: 0.75rem; display: flex; justify-content: space-between; }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #1fff8e; border-radius: 2px; }
     </style>
 </head>
 <body>
@@ -169,16 +116,16 @@
 
     <div class="edex-terminal">
         <div class="status-bar">
-            <div class="status-item"><span class="dot"></span> ESPdefeator@OS</div>
-            <div class="status-item" id="currentPath">⚡ //</div>
-            <div class="status-item">🕒 <span id="uptime">00:00:00</span></div>
+            <div class="status-item"><span class="dot"></span> ESPDEFEATOR_OS v1.0.4</div>
+            <div class="status-item" id="currentPath">⚡ //ROOT/</div>
+            <div class="status-item">UPTIME: <span id="uptime">00:00:00</span></div>
         </div>
 
         <div class="edex-main">
             <div class="file-explorer">
-                <div class="explorer-header" id="explorerHeader">
-                    <span>📁 ROOT</span>
-                    <span style="flex:1; text-align:right;" id="folderIndicator">//</span>
+                <div class="explorer-header">
+                    <span>STRUCTURE</span>
+                    <span style="flex:1; text-align:right; font-size: 0.7rem; opacity: 0.7;" id="folderIndicator">//</span>
                 </div>
                 <div class="explorer-tree" id="fileTree"></div>
             </div>
@@ -186,50 +133,52 @@
             <div class="center-area">
                 <div class="terminal-window">
                     <div class="terminal-titlebar">
-                        <span>bash 5.1</span>
-                        <span>interactive_fs.sh</span>
+                        <span>BASH — SESSION_01</span>
+                        <span>TTY7</span>
                     </div>
                     <div class="terminal-content" id="terminalContent">
-                        <div class="terminal-line"><span class="prompt">┌─[system@matrix]</span></div>
-                        <div class="terminal-line"><span class="prompt">└─$</span> ./init_explorer.sh</div>
-                        <div class="terminal-line">> Filesystem Linked. Click to execute.</div>
+                        <div><span class="prompt">system@esp:~$</span> ./init_os --verbose</div>
+                        <div>> Initializing Matrix Kernel... <span style="color:#1fff8e">[OK]</span></div>
+                        <div>> Mounting virtual_fs... <span style="color:#1fff8e">[OK]</span></div>
                         <div id="dynamicTerminalLine"></div>
                     </div>
                 </div>
 
-                <div class="clock-panel">
-                    <div class="analog-clock" id="largeClock">00:00:00</div>
-                    <div style="color: #1fff8e; font-size: 0.7rem; margin-top: 5px;">SYSTEM TIME</div>
-                </div>
-
-                <div class="social-links-panel">
-                    <div style="color:#8affb0; border-bottom:1px solid #1fff8e; font-size:0.8rem; padding-bottom:4px; flex-shrink: 0;">
-                        ⤷ QUICK_LINKS
+                <div class="bottom-panels">
+                    <div class="clock-panel">
+                        <div class="analog-clock" id="largeClock">00:00:00</div>
+                        <div style="color:#4eff8a; font-size:0.6rem; letter-spacing: 2px;">TIME_SYNC_UTC</div>
                     </div>
-                    <div id="quickLinksContainer" style="overflow-y: auto; flex: 1; margin-top: 10px;">
-                        <div class="social-grid" id="linkGrid">
-                            </div>
+                    <div class="social-links-panel">
+                        <div style="color:#8affb0; border-bottom:1px solid rgba(31, 255, 142, 0.3); font-size:0.7rem; padding-bottom:4px;">⤷ QUICK_LINKS</div>
+                        <div id="quickLinksContainer"></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="edex-footer">
-            <span>📡 FS_STATUS: ONLINE</span>
-            <span>NODES: <span id="nodeCount">2040</span> | 101010</span>
+            <span>📡 CONNECTION: SECURE_ENCRYPTED</span>
+            <span>NODES: <span id="nodeCount">2048</span> | ADDR: 127.0.0.1</span>
         </div>
     </div>
 
     <script>
         (function() {
-            // --- MATRIX ---
+            // --- MATRIX BACKGROUND ---
             const canvas = document.getElementById('matrix-canvas');
             const ctx = canvas.getContext('2d');
-            let w = canvas.width = window.innerWidth;
-            let h = canvas.height = window.innerHeight;
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ｱｲｳｴｵｶｷｸｹｺ";
-            const cols = Math.floor(w / 20);
-            const drops = Array(cols).fill(0);
+            let w, h, cols, drops;
+            const chars = "ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+                cols = Math.floor(w / 20);
+                drops = Array(cols).fill(0);
+            }
+            window.onresize = resize;
+            resize();
 
             function drawMatrix() {
                 ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
@@ -245,7 +194,7 @@
             }
             setInterval(drawMatrix, 50);
 
-            // --- FS DATA ---
+            // --- VIRTUAL FILE SYSTEM DATA ---
             const fs = {
                 name: 'root',
                 type: 'folder',
@@ -257,31 +206,30 @@
                             { name: 'tiktok.link', type: 'file', url: 'https://tiktok.com/@espdefeator' },
                             { name: 'youtube.cfg', type: 'file', url: 'https://youtube.com/@espdefeator' },
                             { name: 'instagram.ini', type: 'file', url: 'https://instagram.com/espdefeator' },
-                            { name: 'hub.dev', type: 'file', url: 'https://github.com/CreeperRick' }
+                            { name: 'github.dev', type: 'file', url: 'https://github.com/CreeperRick' }
                         ]
                     },
                     { 
-                        name: 'system', 
+                        name: 'matrix', 
                         type: 'folder', 
                         children: [
                             { name: 'kernel.bin', type: 'file' },
-                            { name: 'net_config', type: 'file' }
+                            { name: 'glitch.sh', type: 'file' }
                         ]
-                    }
+                    },
+                    { name: 'README.md', type: 'file' }
                 ]
             };
 
-            let currentFolder = fs.children[0];
-            let pathStack = [fs, fs.children[0]];
+            let currentFolder = fs;
+            let pathStack = [fs];
 
             const fileTreeEl = document.getElementById('fileTree');
-            const folderIndicator = document.getElementById('folderIndicator');
-            const currentPathEl = document.getElementById('currentPath');
             const termContent = document.getElementById('terminalContent');
 
             function addLog(text) {
                 const line = document.createElement('div');
-                line.style.margin = "4px 0";
+                line.style.margin = "2px 0";
                 line.innerHTML = `<span class="prompt">>></span> ${text}`;
                 termContent.insertBefore(line, document.getElementById('dynamicTerminalLine'));
                 termContent.scrollTop = termContent.scrollHeight;
@@ -289,12 +237,16 @@
 
             function renderTree() {
                 fileTreeEl.innerHTML = '';
-                
                 if (pathStack.length > 1) {
                     const up = document.createElement('div');
                     up.className = 'tree-item folder';
                     up.textContent = '..';
-                    up.onclick = () => { pathStack.pop(); currentFolder = pathStack[pathStack.length-1]; renderTree(); addLog('cd ..'); };
+                    up.onclick = () => { 
+                        pathStack.pop(); 
+                        currentFolder = pathStack[pathStack.length-1]; 
+                        renderTree(); 
+                        addLog('cd ..'); 
+                    };
                     fileTreeEl.appendChild(up);
                 }
 
@@ -321,35 +273,33 @@
                 });
 
                 const pathStr = pathStack.map(f => f.name === 'root' ? '' : f.name).join('/') + '/';
-                folderIndicator.innerText = pathStr;
-                currentPathEl.innerText = `⚡ ${pathStr}`;
+                document.getElementById('folderIndicator').innerText = pathStr;
+                document.getElementById('currentPath').innerText = `⚡ //ROOT${pathStr}`;
             }
 
             // --- QUICK LINKS GENERATOR ---
-            const links = [
+            const quickLinks = [
                 { name: "GITHUB", url: "https://github.com/CreeperRick" },
                 { name: "YOUTUBE", url: "https://youtube.com/@espdefeator" },
                 { name: "TIKTOK", url: "https://tiktok.com/@espdefeator" },
-                { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
-                { name: "EXTRA_LINK_1", url: "#" },
-                { name: "EXTRA_LINK_2", url: "#" }
+                { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" }
             ];
 
-            const linkGrid = document.getElementById('linkGrid');
-            links.forEach(link => {
+            const qlContainer = document.getElementById('quickLinksContainer');
+            quickLinks.forEach(link => {
                 const a = document.createElement('a');
+                a.className = 'ql-btn';
                 a.href = link.url;
                 a.target = "_blank";
                 a.textContent = link.name;
-                a.onclick = () => addLog(`executing: external_link/${link.name.toLowerCase()}`);
-                linkGrid.appendChild(a);
+                a.onclick = () => addLog(`accessing_external: ${link.name}`);
+                qlContainer.appendChild(a);
             });
 
-            // --- CLOCK & STATS ---
+            // --- CLOCK & UPTIME ---
             function updateUI() {
                 const now = new Date();
-                const clockEl = document.getElementById('largeClock');
-                if(clockEl) clockEl.innerText = now.toLocaleTimeString('en-GB');
+                document.getElementById('largeClock').innerText = now.toLocaleTimeString('en-GB');
                 
                 let up = Math.floor(performance.now() / 1000);
                 let h = Math.floor(up / 3600).toString().padStart(2, '0');
@@ -361,7 +311,6 @@
 
             // Init
             renderTree();
-            updateUI();
         })();
     </script>
 </body>
