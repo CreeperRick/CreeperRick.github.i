@@ -10,17 +10,6 @@
     transition: background 0.2s;
 
 }
-/* Add this to Style.css to hide the clunky scrollbar but keep scrolling */
-#quickLinksContainer::-webkit-scrollbar {
-    width: 4px;
-}
-#quickLinksContainer::-webkit-scrollbar-track {
-    background: transparent;
-}
-#quickLinksContainer::-webkit-scrollbar-thumb {
-    background: #1fff8e;
-    border-radius: 2px;
-}
 
 /* ========== quickLinks ========== */
 #quickLinksContainer {
@@ -37,4 +26,5 @@
     border-radius: 10px;
     border: 1px solid #0b140b;
 }
+
 
