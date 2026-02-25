@@ -45,34 +45,47 @@
     updateClock();
     
 // --- QUICK LINKS GENERATOR ---
-            const quickLinksData = [
-                { name: "GITHUB", url: "https://github.com/creeperrick" },
-                { name: "YOUTUBE", url: "https://youtube.com/@espdefeator" },
-                { name: "TIKTOK", url: "https://tiktok.com/@espdefeator" },
-                { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
-                { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
-                { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
-                { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" }
-            ];
+const quickLinksData = [
+    { name: "GITHUB", url: "https://github.com/creeperrick" },
+    { name: "YOUTUBE", url: "https://youtube.com/@espdefeator" },
+    { name: "TIKTOK", url: "https://tiktok.com/@espdefeator" },
+    { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
+    { name: "DISCORD", url: "https://discord.com/users/1426713075989610698" },
+];
 
-            const qlContainer = document.getElementById('quickLinksContainer');
-            if (qlContainer) {
-                qlContainer.innerHTML = ''; 
-                quickLinksData.forEach(link => {
-                    const a = document.createElement('a');
-                    a.href = link.url;
-                    a.target = "_blank";
-                    a.textContent = link.name;
-                    a.style.display = "block"; // Keep buttons stacked
-                    
-                    // Uses the addLog function already in this script
-                    a.onclick = () => {
-                        addLog(`executing: ${link.name}_LINK`);
-                    };
-                    
-                    qlContainer.appendChild(a);
-                });
+function renderQuickLinks() {
+    const container = document.getElementById('quickLinksContainer');
+    if (!container) return;
+
+    container.innerHTML = '';
+    quickLinksData.forEach(link => {
+        const a = document.createElement('a');
+        a.href = link.url;
+        a.target = "_blank";
+        a.textContent = link.name;
+        a.className = 'tree-item file'; // Uses explorer styles for identical look
+        a.style.display = "block";
+        a.style.marginBottom = "4px";
+
+        a.onclick = (e) => {
+            // Remove 'active' from all links in THIS container
+            container.querySelectorAll('.tree-item').forEach(x => x.classList.remove('active'));
+            // Add 'active' to clicked link
+            a.classList.add('active');
+            
+            // Log to terminal using your existing function
+            if (typeof addLog === 'function') {
+                addLog(`executing: ${link.name}`);
+            } else if (typeof addTerminalLine === 'function') {
+                addTerminalLine(`executing: ${link.name}`);
             }
+        };
+        container.appendChild(a);
+    });
+}
+
+// Call this inside your init block or at the bottom of the script
+renderQuickLinks();
     
     // ========== INTERACTIVE FILE SYSTEM ==========
     const fs = {
@@ -192,6 +205,7 @@
             terminalInputDisplay.innerText = '_';
         }
     });
+
 
 
 
