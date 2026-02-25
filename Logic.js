@@ -3,6 +3,7 @@
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     let w, h;
+
     function setCanvasDimensions() {
         w = window.innerWidth;
         h = window.innerHeight;
@@ -36,16 +37,42 @@
     }
     drawMatrix();
 
+    // ========== TERMINAL LOGIC ==========
+    const terminalContent = document.getElementById('terminalContent');
+
+    // unified logging function to prevent errors
+    function addLog(text) {
+        const line = document.createElement('div');
+        line.className = 'terminal-line';
+        line.style.margin = "4px 0";
+        line.innerHTML = `<span class="prompt">>></span> ${text}`;
+        // Insert before the dynamic input line if it exists
+        const dynamicLine = document.getElementById('dynamicTerminalLine');
+        if (dynamicLine) {
+            terminalContent.insertBefore(line, dynamicLine);
+        } else {
+            terminalContent.appendChild(line);
+        }
+        terminalContent.scrollTop = terminalContent.scrollHeight;
+    }
+
     // ========== REAL-TIME CLOCK ==========
     function updateClock() {
         const now = new Date();
-        document.getElementById('largeClock').innerText = now.toLocaleTimeString('en-GB');
+        const clockDisplay = document.getElementById('largeClock');
+        if (clockDisplay) clockDisplay.innerText = now.toLocaleTimeString('en-GB');
+        
+        let up = Math.floor(performance.now() / 1000);
+        let hours = Math.floor(up / 3600).toString().padStart(2, '0');
+        let mins = Math.floor((up % 3600) / 60).toString().padStart(2, '0');
+        let secs = (up % 60).toString().padStart(2, '0');
+        const uptimeDisplay = document.getElementById('uptime');
+        if (uptimeDisplay) uptimeDisplay.innerText = `${hours}:${mins}:${secs}`;
     }
     setInterval(updateClock, 1000);
     updateClock();
-    
-// --- QUICK LINKS GENERATOR (Explorer Style) ---
-window.addEventListener('load', () => {
+
+    // ========== QUICK LINKS GENERATOR ==========
     const quickLinks = [
         { name: "GITHUB", url: "https://github.com/creeperrick" },
         { name: "YOUTUBE", url: "https://youtube.com/@espdefeator" },
@@ -55,34 +82,32 @@ window.addEventListener('load', () => {
         { name: "EXTRA_02", url: "#" }
     ];
 
-    const container = document.getElementById('quickLinksContainer');
-    if (container) {
-        container.innerHTML = ''; 
+    const qlContainer = document.getElementById('quickLinksContainer');
+    if (qlContainer) {
+        qlContainer.innerHTML = ''; 
         quickLinks.forEach(link => {
             const a = document.createElement('a');
             a.href = link.url;
             a.target = "_blank";
             a.textContent = link.name;
             
-            // Apply standard button styling via JS to ensure visibility
+            // Standard non-explorer styling
             a.style.display = "block";
             a.style.background = "#0f1f0f";
             a.style.border = "1px solid #2eff9e";
             a.style.color = "#fff";
-            a.style.padding = "8px";
-            a.style.marginBottom = "5px";
+            a.style.padding = "10px";
+            a.style.marginBottom = "6px";
             a.style.textAlign = "center";
             a.style.textDecoration = "none";
             a.style.fontSize = "0.8rem";
+            a.style.borderRadius = "4px";
 
-            a.onclick = () => {
-                if (typeof addLog === 'function') addLog(`executing: ${link.name}`);
-            };
-            container.appendChild(a);
+            a.onclick = () => addLog(`executing: ${link.name}_LINK`);
+            qlContainer.appendChild(a);
         });
     }
-});
-    
+
     // ========== INTERACTIVE FILE SYSTEM ==========
     const fs = {
         name: 'root',
@@ -110,7 +135,7 @@ window.addEventListener('load', () => {
         ]
     };
 
-    let currentFolder = fs.children[0]; // Start in socials folder
+    let currentFolder = fs.children[0]; 
     let pathStack = [fs, fs.children[0]];
 
     const fileTreeEl = document.getElementById('fileTree');
@@ -119,11 +144,9 @@ window.addEventListener('load', () => {
 
     function renderTree(folder) {
         fileTreeEl.innerHTML = '';
-        
-        // Back Button
         if (folder !== fs) {
             const back = document.createElement('div');
-            back.className = 'tree-item folder-open';
+            back.className = 'tree-item folder';
             back.textContent = '..';
             back.onclick = goUp;
             fileTreeEl.appendChild(back);
@@ -132,26 +155,23 @@ window.addEventListener('load', () => {
         folder.children.forEach(child => {
             const isLink = child.type === 'file' && child.content.startsWith('http');
             const item = document.createElement(isLink ? 'a' : 'div');
-            
-            item.className = `tree-item ${child.type === 'folder' ? 'folder-open' : 'file'}`;
+            item.className = `tree-item ${child.type === 'folder' ? 'folder' : 'file'}`;
             item.textContent = child.name;
+            
             if(isLink) {
                 item.href = child.content;
                 item.target = "_blank";
-                item.style.textDecoration = "none";
-                item.style.display = "block";
-                item.style.color = "inherit";
             }
 
             item.onclick = (e) => {
                 document.querySelectorAll('.tree-item').forEach(el => el.classList.remove('active'));
                 item.classList.add('active');
-                
                 if (child.type === 'folder') {
-                    openFolder(child);
+                    pathStack.push(child);
+                    renderTree(child);
+                    addLog(`cd ./${child.name}`);
                 } else {
-                    addTerminalLine(`> executing: ${child.name}`);
-                    if(!isLink) addTerminalLine(`> ${child.content}`);
+                    addLog(`executing: ${child.name}`);
                 }
             };
             fileTreeEl.appendChild(item);
@@ -163,51 +183,14 @@ window.addEventListener('load', () => {
         currentPathEl.innerText = `⚡ ${displayPath}`;
     }
 
-    function openFolder(folder) {
-        pathStack.push(folder);
-        renderTree(folder);
-        addTerminalLine(`> cd ./${folder.name}`);
-    }
-
     function goUp() {
         if (pathStack.length > 1) {
             pathStack.pop();
             renderTree(pathStack[pathStack.length - 1]);
-            addTerminalLine(`> cd ..`);
+            addLog(`cd ..`);
         }
     }
 
-    // ========== TERMINAL LOGIC ==========
-    const terminalContent = document.getElementById('terminalContent');
-    const hiddenInput = document.getElementById('hiddenTerminalInput');
-    const terminalInputDisplay = document.getElementById('terminalInputDisplay');
-
-    function addTerminalLine(text) {
-        const line = document.createElement('div');
-        line.className = 'terminal-line';
-        line.innerHTML = `<span class="prompt">>></span> ${text}`;
-        terminalContent.insertBefore(line, document.getElementById('dynamicTerminalLine'));
-        terminalContent.scrollTop = terminalContent.scrollHeight;
-    }
-
-    hiddenInput.addEventListener('input', () => {
-        terminalInputDisplay.innerText = hiddenInput.value + '_';
-    });
-
-    hiddenInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            addTerminalLine(hiddenInput.value);
-            hiddenInput.value = '';
-            terminalInputDisplay.innerText = '_';
-        }
-    });
-
-
-
-
-
-
-
-
-
-
+    // Init Explorer
+    renderTree(currentFolder);
+})();
