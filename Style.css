@@ -20,4 +20,60 @@
 .social-links-panel::-webkit-scrollbar-thumb {
     background: #1fff8e;
     border-radius: 10px;
+
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+
+/* Allow the main container to scale and scroll on small screens */
+.edex-terminal {
+    width: 98vw;
+    height: auto; /* Changed from 90vh */
+    min-height: 95vh;
+    margin: 10px auto;
+}
+
+/* Stack the sidebar and main area vertically on mobile */
+.edex-main {
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* Make File Explorer full width on mobile */
+.file-explorer {
+    width: 100%;
+    max-height: 200px; /* Limit height so it doesn't push terminal off-screen */
+    margin-bottom: 10px;
+}
+
+/* Ensure the center area takes up remaining space */
+.center-area {
+    width: 100%;
+    flex: none;
+}
+
+/* Stack the Clock, Spotify, and Links panels vertically */
+.center-area > div:last-child {
+    flex-direction: column !important;
+}
+
+/* Adjust terminal height for mobile */
+.terminal-window {
+    min-height: 300px;
+    margin-bottom: 10px;
+}
+
+/* Font size adjustments for small screens */
+@media (max-width: 600px) {
+    .analog-clock {
+        font-size: 2rem;
+    }
+    .status-bar {
+        font-size: 0.7rem;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .tree-item {
+        padding: 12px; /* Bigger touch targets */
+    }
 }
