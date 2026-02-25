@@ -45,40 +45,40 @@
     updateClock();
     
 // --- QUICK LINKS GENERATOR (Explorer Style) ---
-            const quickLinksData = [
-                { name: "GITHUB", url: "https://github.com/creeperrick" },
-                { name: "YOUTUBE", url: "https://youtube.com/@espdefeator" },
-                { name: "TIKTOK", url: "https://tiktok.com/@espdefeator" },
-                { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
-                { name: "INSTAGRAM_ALT", url: "https://instagram.com/espdefeator" },
-                { name: "INSTAGRAM_BACKUP", url: "https://instagram.com/espdefeator" },
-                { name: "SYSTEM_LINK", url: "#" }
-            ];
+javascript
+window.addEventListener('load', () => {
+    const quickLinks = [
+        { name: "GITHUB", url: "https://github.com/creeperrick" },
+        { name: "YOUTUBE", url: "https://youtube.com/@espdefeator" },
+        { name: "TIKTOK", url: "https://tiktok.com/@espdefeator" },
+        { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
+        { name: "EXTRA_LINK_01", url: "#" },
+        { name: "EXTRA_LINK_02", url: "#" },
+        { name: "EXTRA_LINK_03", url: "#" }
+    ];
 
-            const qlContainer = document.getElementById('quickLinksContainer');
-            if (qlContainer) {
-                qlContainer.innerHTML = ''; 
-                quickLinksData.forEach(link => {
-                    const a = document.createElement('a');
-                    a.href = link.url;
-                    a.target = "_blank";
-                    a.textContent = link.name;
-                    // Use the explorer's CSS classes for identical styling
-                    a.className = 'tree-item file'; 
-                    a.style.textDecoration = 'none';
-
-                    a.onclick = (e) => {
-                        // Remove 'active' from all other links in this specific box
-                        qlContainer.querySelectorAll('.tree-item').forEach(x => x.classList.remove('active'));
-                        // Highlight the clicked link
-                        a.classList.add('active');
-                        // Log to terminal using your existing addLog function
-                        addLog(`executing: ${link.name}`);
-                    };
-                    
-                    qlContainer.appendChild(a);
-                });
-            }
+    const container = document.getElementById('quickLinksContainer');
+    
+    if (container) {
+        container.innerHTML = ''; 
+        quickLinks.forEach(link => {
+            const a = document.createElement('a');
+            a.href = link.url;
+            a.target = "_blank";
+            a.textContent = link.name;
+            a.style.display = "block"; // Stack them vertically
+            
+            a.onclick = () => {
+                // Call addLog because that is what is defined in index.html
+                if (typeof addLog === 'function') {
+                    addLog(`executing: ${link.name}_LINK`);
+                }
+            };
+            
+            container.appendChild(a);
+        });
+    }
+});
     
     // ========== INTERACTIVE FILE SYSTEM ==========
     const fs = {
@@ -198,6 +198,7 @@
             terminalInputDisplay.innerText = '_';
         }
     });
+
 
 
 
