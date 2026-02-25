@@ -206,13 +206,75 @@
                             loading="lazy">
                         </iframe>
                     </div>
-<div class="social-links-panel" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
-    <div style="color:#8affb0; border-bottom:1px solid #1fff8e; font-size:0.8rem; padding-bottom:4px; flex-shrink: 0;">
-        ⤷ QUICK_LINKS
+<div style="display: flex; gap: 6px; flex: 1.2; min-height: 0;">
+    <div class="clock-panel" style="flex: 1;">
+        <div class="analog-clock" id="largeClock">00:00:00</div>
+        <div style="color:#4eff8a; font-size:0.7rem; margin-top:5px;">REAL-TIME CLOCK</div>
     </div>
-    <div id="quickLinksContainer" style="overflow-y: auto; flex: 1; margin-top: 10px; padding-right: 5px;">
+
+    <div class="social-links-panel" style="flex: 1.5; padding: 5px; display: flex; flex-direction: column;">
+        <div style="color:#8affb0; border-bottom:1px solid #1fff8e; font-size:0.8rem; padding-bottom:4px; margin-bottom: 5px;">⤷ AUDIO_SUBSYSTEM</div>
+        <iframe 
+            style="border-radius:8px" 
+            src="https://open.spotify.com/embed/playlist/37i9dQZF1DXbc8V9XpQf3Y" 
+            width="100%" 
+            height="152" 
+            frameBorder="0" 
+            allowfullscreen="" 
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+            loading="lazy">
+        </iframe>
+    </div>
+
+    <div class="social-links-panel" style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+        <div style="color:#8affb0; border-bottom:1px solid #1fff8e; font-size:0.8rem; padding-bottom:4px; flex-shrink: 0;">
+            ⤷ QUICK_LINKS
         </div>
-</div>
+        <div id="quickLinksContainer" class="social-grid" style="grid-template-columns: 1fr; overflow-y: auto; flex: 1; margin-top: 10px; padding-right: 5px;">
+            </div>
+    </div>
+</div> ```
+
+
+### 2. Update the JavaScript (`Logic.js`)
+To ensure the links actually "show up" and use the terminal logging function available in your project, update the `quickLinks` section in `Logic.js`.
+
+**Crucial:** Change `addTerminalLine` to `addLog` to match the function name defined in your `index.html`.
+
+```javascript
+window.addEventListener('load', () => {
+    const quickLinks = [
+        { name: "GITHUB", url: "https://github.com/creeperrick" },
+        { name: "YOUTUBE", url: "https://youtube.com/@espdefeator" },
+        { name: "TIKTOK", url: "https://tiktok.com/@espdefeator" },
+        { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
+        { name: "EXTRA_LINK_01", url: "#" },
+        { name: "EXTRA_LINK_02", url: "#" },
+        { name: "EXTRA_LINK_03", url: "#" }
+    ];
+
+    const container = document.getElementById('quickLinksContainer');
+    
+    if (container) {
+        container.innerHTML = ''; 
+        quickLinks.forEach(link => {
+            const a = document.createElement('a');
+            a.href = link.url;
+            a.target = "_blank";
+            a.textContent = link.name;
+            a.style.display = "block"; // Stack them vertically
+            
+            a.onclick = () => {
+                // Call addLog because that is what is defined in index.html
+                if (typeof addLog === 'function') {
+                    addLog(`executing: ${link.name}_LINK`);
+                }
+            };
+            
+            container.appendChild(a);
+        });
+    }
+});
                     </div>
                 </div>
             </div>
