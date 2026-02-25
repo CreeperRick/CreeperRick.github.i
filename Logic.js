@@ -44,36 +44,41 @@
     setInterval(updateClock, 1000);
     updateClock();
     // ========== quickLinks ========== 
-    const quickLinks = [
-        { name: "GITHUB", url: "https://github.com/creeperrick" },
-        { name: "YOUTUBE", url: "https://youtube.com/@espdefeator" },
-        { name: "TIKTOK", url: "https://tiktok.com/@espdefeator" },
-        { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
-        { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
-        { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
-        { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" }
-    ];
+    window.addEventListener('load', () => {
+        const quickLinks = [
+            { name: "GITHUB", url: "https://github.com/creeperrick" },
+            { name: "YOUTUBE", url: "https://youtube.com/@espdefeator" },
+            { name: "TIKTOK", url: "https://tiktok.com/@espdefeator" },
+            { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
+            { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
+            { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
+            { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" }
+        ];
     
-    const container = document.getElementById('quickLinksContainer');
-    if (container) {
-        container.innerHTML = ''; // Clear hardcoded HTML
-        quickLinks.forEach(link => {
-            const a = document.createElement('a');
-            a.href = link.url;
-            a.target = "_blank";
-            a.textContent = link.name;
-            
-            // Link clicking feedback for the terminal
-            a.addEventListener('click', () => {
-                // This calls the log function already present in your code
-                if (typeof addLog === 'function') {
-                    addLog(`executing: ${link.name}_LINK`);
-                }
+        const container = document.getElementById('quickLinksContainer');
+        
+        if (container) {
+            container.innerHTML = ''; // Clear any fallback text
+            quickLinks.forEach(link => {
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.target = "_blank";
+                a.textContent = link.name;
+                
+                // This maintains your existing styling
+                a.style.display = "block";
+                
+                // Optional: link to your terminal logging
+                a.onclick = () => {
+                    if (typeof addTerminalLine === 'function') {
+                        addTerminalLine(`> opening link: ${link.name}`);
+                    }
+                };
+                
+                container.appendChild(a);
             });
-    
-            container.appendChild(a);
-        });
-    }
+        }
+    });
     // ========== INTERACTIVE FILE SYSTEM ==========
     const fs = {
         name: 'root',
@@ -192,4 +197,5 @@
             terminalInputDisplay.innerText = '_';
         }
     });
+
 
