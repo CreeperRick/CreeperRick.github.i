@@ -50,35 +50,33 @@
             { name: "YOUTUBE", url: "https://youtube.com/@espdefeator" },
             { name: "TIKTOK", url: "https://tiktok.com/@espdefeator" },
             { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
-            { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
-            { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
-            { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" }
+            { name: "TWITCH", url: "#" },
+            { name: "DISCORD", url: "#" },
+            { name: "PROJECTS", url: "#" }
         ];
     
         const container = document.getElementById('quickLinksContainer');
         
         if (container) {
-            container.innerHTML = ''; // Clear any fallback text
+            container.innerHTML = ''; 
             quickLinks.forEach(link => {
                 const a = document.createElement('a');
                 a.href = link.url;
                 a.target = "_blank";
                 a.textContent = link.name;
                 
-                // This maintains your existing styling
-                a.style.display = "block";
-                
-                // Optional: link to your terminal logging
-                a.onclick = () => {
+                // Link to the terminal logging function in Logic.js
+                a.addEventListener('click', () => {
                     if (typeof addTerminalLine === 'function') {
-                        addTerminalLine(`> opening link: ${link.name}`);
+                        addTerminalLine(`executing: ${link.name}_LINK`);
                     }
-                };
-                
+                });
+    
                 container.appendChild(a);
             });
         }
     });
+    
     // ========== INTERACTIVE FILE SYSTEM ==========
     const fs = {
         name: 'root',
@@ -197,5 +195,6 @@
             terminalInputDisplay.innerText = '_';
         }
     });
+
 
 
