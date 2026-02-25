@@ -162,8 +162,46 @@
             terminalInputDisplay.innerText = '_';
         }
     });
+    // 1. Define your links array
+const quickLinks = [
+    { name: "GITHUB", url: "https://github.com/creeperrick" },
+    { name: "YOUTUBE", url: "https://youtube.com/@espdefeator" },
+    { name: "TIKTOK", url: "https://tiktok.com/@espdefeator" },
+    { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
+    { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
+    { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" },
+    { name: "INSTAGRAM", url: "https://instagram.com/espdefeator" }
+];
+
+// 2. Function to render the links
+function renderQuickLinks() {
+    const container = document.getElementById('quickLinksContainer');
+    if (!container) return;
+
+    container.innerHTML = ''; // Clear existing
+    
+    quickLinks.forEach(link => {
+        const a = document.createElement('a');
+        a.href = link.url;
+        a.target = "_blank";
+        a.textContent = link.name;
+        
+        // Optional: Add a terminal log when clicking
+        a.onclick = () => {
+            if (typeof addTerminalLine === 'function') {
+                addTerminalLine(`Opening external link: ${link.name}`);
+            }
+        };
+        
+        container.appendChild(a);
+    });
+}
+
+// 3. Run the function
+renderQuickLinks();
 
     // Start
     renderTree(currentFolder);
     addTerminalLine("System Initialized. Explorer Linked.");
+
 })();
